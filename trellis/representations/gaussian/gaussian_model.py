@@ -145,7 +145,7 @@ class Gaussian:
         el = PlyElement.describe(elements, 'vertex')
         PlyData([el]).write(path)
 
-    def load_ply(self, path, transform=[[1, 0, 0], [0, 0, -1], [0, 1, 0]]):
+    def load_ply(self, path, transform=[[1, 0, 0], [0, 0, -1], [0, 1, 0]], user_transform = None):
         plydata = PlyData.read(path)
 
         xyz = np.stack((np.asarray(plydata.elements[0]["x"]),
@@ -180,12 +180,19 @@ class Gaussian:
         for idx, attr_name in enumerate(rot_names):
             rots[:, idx] = np.asarray(plydata.elements[0][attr_name])
             
-        if transform is not None:
+        if transform is not None: # debug @InsertAny3D
             transform = np.array(transform)
             xyz = np.matmul(xyz, transform)
-            rotation = utils3d.numpy.quaternion_to_matrix(rotation)
-            rotation = np.matmul(rotation, transform)
-            rotation = utils3d.numpy.matrix_to_quaternion(rotation)
+            rotation_matrices = utils3d.numpy.quaternion_to_matrix(rots) 
+            rotation_matrices = np.matmul(transform.T, rotation_matrices) 
+            rots = utils3d.numpy.matrix_to_quaternion(rotation_matrices)
+
+        if user_transform is not None: # add @InsertAny3D
+            transform = np.array(user_transform)
+            xyz = np.matmul(xyz, transform)
+            rotation_matrices = utils3d.numpy.quaternion_to_matrix(rots) 
+            rotation_matrices = np.matmul(transform.T, rotation_matrices) 
+            rots = utils3d.numpy.matrix_to_quaternion(rotation_matrices)
             
         # convert to actual gaussian attributes
         xyz = torch.tensor(xyz, dtype=torch.float, device=self.device)

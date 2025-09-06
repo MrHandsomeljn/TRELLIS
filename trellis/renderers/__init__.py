@@ -4,6 +4,7 @@ __attributes = {
     'OctreeRenderer': 'octree_renderer',
     'GaussianRenderer': 'gaussian_render',
     'MeshRenderer': 'mesh_renderer',
+    'GaussianRenderer_Absdepth': 'gaussian_render',
 }
 
 __submodules = []
@@ -29,3 +30,4 @@ if __name__ == '__main__':
     from .octree_renderer import OctreeRenderer
     from .gaussian_render import GaussianRenderer
     from .mesh_renderer import MeshRenderer
+    from .gaussian_render import GaussianRenderer_Absdepth

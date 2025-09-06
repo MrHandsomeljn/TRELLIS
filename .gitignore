@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# run results
+output
+# in install absdepth render
+diff_gaussian_rasterization_absdepth.egg-info/
+
+
 # User-specific files
 *.rsuser
 *.suo
